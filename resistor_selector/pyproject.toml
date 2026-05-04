@@ -1,0 +1,9 @@
+[project]
+name = "resistor-selector"
+version = "1.0.0"
+description = "MCP23008 + FT232H resistor relay selector"
+requires-python = ">=3.9"
+dependencies = [
+  "adafruit-blinka",
+  "adafruit-circuitpython-mcp230xx"
+]
