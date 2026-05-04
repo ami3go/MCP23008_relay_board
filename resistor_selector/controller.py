@@ -12,6 +12,27 @@ import busio
 from digitalio import Direction
 from adafruit_mcp230xx.mcp23008 import MCP23008
 
+"""
+relay_board.py
+==============
+Python library for controlling up to 5 x 8-channel relay boards
+connected via I2C using MCP23008 GPIO expander ICs and an FTDI FT232H
+USB-to-I2C interface on the PC side.
+
+Hardware assumptions
+--------------------
+* Each relay board uses one MCP23008 (8-bit I/O expander).
+* MCP23008 I2C base address: 0x20.
+* Board address is set by the A0/A1/A2 hardware pins on each IC:
+    Board 0 → A2=0 A1=0 A0=0 → 0x20
+    Board 1 → A2=0 A1=0 A0=1 → 0x21
+    Board 2 → A2=0 A1=1 A0=0 → 0x22
+    Board 3 → A2=0 A1=1 A0=1 → 0x23
+    Board 4 → A2=1 A1=0 A0=0 → 0x24
+* GP0–GP7 drive relay channels 1–8 respectively.
+* Relay is ACTIVE HIGH by default (set active_low=True if your board
+  energises the coil when the output is pulled LOW).
+"""
 
 class ResistorSelector:
     """
@@ -24,7 +45,23 @@ class ResistorSelector:
     MCP_BASE = 0x20
     MAX_BOARDS = 5
     CHANNELS = 8
+'''
+Functional version of the resistor selector.
 
+All state is explicit – no classes, no hidden instance variables.
+The "controller handle" is just a plain dict returned by open_controller()
+and passed into every function that needs hardware access.
+
+Resistor map (same hardware as resistor_selector.py):
+    Channel 1 →   1.3 kΩ
+    Channel 2 →   1.6 kΩ
+    Channel 3 →  13   kΩ
+    Channel 4 →  30   kΩ
+    Channel 5 →  68   kΩ
+    Channel 6 → 180   kΩ
+    Channel 7 →  (unused)
+    Channel 8 →  (unused)
+'''
     RESISTOR_MAP = {
         6: 1_300,
         5: 1_600,
