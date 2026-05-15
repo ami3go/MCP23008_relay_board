@@ -67,6 +67,7 @@ from typing import Dict, Optional
 # ---------------------------------------------------------------------------
 if "BLINKA_FT232H" not in os.environ:
     os.environ["BLINKA_FT232H"] = "1"
+    os.environ["PYUSB_BACKEND"] = "libusb1"  # or "libusb0"
 
 import board                                          # type: ignore  (blinka)
 import busio                                          # type: ignore  (blinka)
